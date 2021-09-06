@@ -3,11 +3,7 @@ from application.server import app
 from application.database import db
 from application.extensions import auth
 
-from application.models.model import User, Role
-
-@app.route("/user_test")
-async def user_test(request):
-    return text("user_test api")
+from application.models.model import User
 
 @app.route("/user/login", methods=["POST", "GET"])
 async def user_login(request):
@@ -24,7 +20,6 @@ async def user_login(request):
 
     else:
         return json({"error_code": "PARAM_ERROR", "error_message": "param error"}, status=520)
-    return text("user_login api")
 
 @app.route("/user/logout", methods=["GET"])
 async def user_logout(request):
@@ -42,4 +37,4 @@ async def user_current_user(request):
         return json({"id": user.id, "user_name": user.user_name, "full_name": user.full_name})
     else:
         return json({"error_code": "NOT_FOUND", "error_message": "User not found"}, status=520)
-    return json({"error_code": "UNKNOWN", "error_message": "Unknown error"}, status=520)
+

@@ -1,36 +1,30 @@
 """ Module represents a User. """
 
 from sqlalchemy import (
-    Column, String, Integer,
-    DateTime, Date, Boolean,
-    ForeignKey
+    Column, String, Integer, Boolean,
+    ForeignKey, BigInteger, DECIMAL, SmallInteger
 )
 
 from sqlalchemy import (
-    Column, String, Integer, DateTime, Date, Boolean, DECIMAL, ForeignKey, Text
+    Column, String, Integer, Boolean, ForeignKey 
 )
-from sqlalchemy.dialects.postgresql import UUID
 
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship
 
 from application.database import db
-from application.database.model import CommonModel, default_uuid
-
-
-roles_users = db.Table('roles_users',
-                       db.Column('user_id', Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True),
-                       db.Column('role_id', Integer, db.ForeignKey('role.id', onupdate='cascade'), primary_key=True))
-
-
-class Role(CommonModel):
-    __tablename__ = 'role'
-    id = db.Column(Integer, autoincrement=True, primary_key=True)
-    role_name = db.Column(String(100), index=True, nullable=False, unique=True)
-    display_name = db.Column(String(255), nullable=False)
-    description = db.Column(String(255))
+from application.database.model import CommonModel
 
 class User(CommonModel):
-    __tablename__ = 'users'
+    """Thông tin người dùng
+    :atr int id: id khóa chính của user_id 
+    :atr str user_name: Tên người dùng 
+    :atr str full_name: Tên đầy đủ
+    :atr str password: Mật khẩu
+    :atr str salt: Dải salt để mã hóa mật khẩu
+    :atr str fb_messenger_pid: id liên lạc của người dùng trên Facebook messenger
+    :atr bool is_active: Trạng thái active của người dùng, có bị khóa tài khoản hay không
+    """
+    __tablename__ = 'user'
 
     id = db.Column(Integer, autoincrement=True, primary_key=True)
 
@@ -40,6 +34,7 @@ class User(CommonModel):
     email = db.Column(String(255), nullable=False, index=True)
     password = db.Column(String(255), nullable=False)
     salt = db.Column(String(255), nullable=False)
+    fb_messenger_pid = db.Column(String(255), nullable=False)
 
     # Permission Based Attributes.
     is_active = db.Column(Boolean, default=True)
@@ -47,68 +42,75 @@ class User(CommonModel):
     # Methods
     def __repr__(self):
         """ Show user object info. """
-        return '<User: {}>'.format(self.id)
+        return '<User: {}>'.format(self.id) 
 
-class QuocGia(CommonModel):
-    __tablename__ = 'quocgia'
-    id = db.Column(Integer, primary_key=True)
-    ma = db.Column(String(255), unique=True)
-    ten = db.Column(String(255), nullable=False)
-    mota = db.Column(String(255), nullable=True)
-    tinhthanh = db.relationship("TinhThanh", order_by="TinhThanh.id", cascade="all, delete-orphan")
-    
-class TinhThanh(CommonModel):
-    __tablename__ = 'tinhthanh'
-    id = db.Column(Integer, primary_key=True)
-    ma = db.Column(String(255), unique=True)
-    ten = db.Column(String(255), nullable=False)
-    quocgia_id = db.Column(Integer, ForeignKey('quocgia.id'), nullable=False)
-    quocgia = db.relationship('QuocGia')
+class CryptoPlatform(CommonModel):
+    """Nền tảng crypto, Ethereum,...
+    :atr int id: id khóa chính của platform 
+    :atr str platform_name: Tên của platform 
+    """
+    __tablename__ = 'crypto_platform'
+    id = db.Column(Integer, autoincrement=True, primary_key=True)
+    platform_name = db.Column(String(100), nullable=False)
 
-class KhachHang(CommonModel):
-    __tablename__ = 'khachhang'
-    id = db.Column(Integer, primary_key=True)
-    ma = db.Column(String(255), unique=True)
-    ten = db.Column(String(255), nullable=False)
-    quocgia_id = db.Column(Integer, ForeignKey('quocgia.id'), nullable=False)
-    quocgia = db.relationship('QuocGia')
-    sodienthoai = db.Column(String(255))
-    email = db.Column(String(255))
-    diachi = db.Column(String(255))
+class CryptoCurrency(CommonModel):
+    """Danh sách tiền ảo
+    :atr int id: id khóa chính của platform 
+    :atr str gecko_coin_id: id của crypto coin trên gecko, cái này dùng để query giá 
+    :atr str symbol: viết tắt của coin 
+    :atr str coin_name: Tên của coin 
+    :atr str platform_id: Mã id của platform của coin , khóa ngoại tới bảng crypto_platform 
+    """
+    __tablename__ = 'crypto_currency'
+    id = db.Column(Integer, autoincrement=True, primary_key=True)
+    gecko_coin_id = db.Column(String(100), nullable=False)
+    symbol = db.Column(String(100), nullable=False)
+    coin_name = db.Column(String(100), nullable=False)
+    platform_id = db.Column(Integer, ForeignKey('crypto_platform.id'))
+    platform = db.relationship('CryptoPlatform')
 
-class HangHoa(CommonModel):
-    __tablename__ = 'hanghoa'
-    id = db.Column(Integer, primary_key=True)
-    ma = db.Column(String(255), unique=True)
-    ten = db.Column(String(255), nullable=False)
-    gia = db.Column(Integer)
-    ghichu = db.Column(String(255))
+class CryptoPrice(CommonModel):
+    """Lịch sử giá của crypto
 
-class HoaDon(CommonModel):
-    __tablename__ = 'hoadon'
-    id = db.Column(Integer, primary_key=True)
-    ma = db.Column(String(255), unique=True)
-    ghichu = db.Column(String(255))
-    khachhang_id = db.Column(Integer, ForeignKey('khachhang.id'), nullable=False)
-    tenkhachhang = db.Column(String(255))
-    ngaymua = db.Column(DateTime)
+    """
+    __tablename__ = 'crypto_price'
+    id = db.Column(Integer, autoincrement=True, primary_key=True)
+    timestamp = db.Column(BigInteger(), nullable=True)
+    coin_id = db.Column(Integer, ForeignKey('crypto_currency.id'))
+    coin = db.relationship('crypto_currency')
+    currency_id = db.Column(Integer, ForeignKey('currency.id'))
+    currency = db.relationship('Currency')
+    price = db.Column(DECIMAL(), nullable=False)
 
-    thanhtien = db.Column(DECIMAL)
-    vat = db.Column(Integer, default=10)
-    tongtien = db.Column(DECIMAL)
+class Currency(CommonModel):
+    """Đơn vị quy đổi của crypto
 
-    chitiethoadon = db.relationship("ChiTietHoaDon", order_by="ChiTietHoaDon.id", cascade="all, delete-orphan", lazy='dynamic')
+    """
+    __tablename__ = 'currency'
+    id = db.Column(Integer, autoincrement=True, primary_key=True)
+    currency_name = db.Column(String(100), nullable=False)
 
-class ChiTietHoaDon(CommonModel):
-    __tablename__ = 'chitiethoadon'
-    id = db.Column(Integer, primary_key=True)
-    hoadon_id = db.Column(Integer, ForeignKey('hoadon.id'), nullable=False)
-
-    hanghoa_id = db.Column(Integer, ForeignKey('hanghoa.id'), nullable=False)
-    mahanghoa = db.Column(String(255))
-    tenhanghoa = db.Column(String(255))
-
-    soluong = db.Column(Integer)
-    dongia = db.Column(Integer)
-    thanhtien = db.Column(Integer)
-    
+class Notification(CommonModel):
+    """Lưu cài đặt thông báo của người dùng
+    :atr float notify_price_at: Giá thông báo
+    :atr int price_status: 0 - nhỏ hơn hoặc bằng, 1 - lớn hơn hoặc bằng
+    :atr str notify_type: là một chuỗi ngăn cách nhau bởi dấu phẩy
+        0 - Qua email, 1 - Qua Facebook messenger, 2 - Trực tiếp trên web base
+    :atr int coin_id: id của coin, khóa ngoại
+    :atr int currency_id: id của đơn vị tiền tệ, khóa ngoại
+    :atr int user_id: id của user, khóa ngoại
+    :atr bool is_notify: Notification này đã được xử lý hay chưa 
+    """
+    __tablename__ = 'notification'
+    id = db.Column(Integer, autoincrement=True, primary_key=True)
+    notify_price_at = db.Column(DECIMAL(), nullable=False)
+    notify_type = db.Column(String(10), nullable=False)
+    price_status = db.Column(SmallInteger(), nullable=False)
+    coin_id = db.Column(Integer, ForeignKey('crypto_currency.id'))
+    coin = db.relationship('CryptoCurrency')
+    user_id = db.Column(Integer, ForeignKey('user.id'))
+    user = db.relationship('user')
+    currency_id = db.Column(Integer, ForeignKey('currency.id'))
+    currency = db.relationship('Currency')
+    is_notify = db.Column(Boolean, default=False)
+   
