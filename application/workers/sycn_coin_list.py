@@ -23,7 +23,7 @@ def sync_coin_list():
             platform_name = list(coin_platform.keys())[0]
             print("platform_name", platform_name)
 
-        if coin_platform:
+        if coin_platform and coin_platform != {}:
             platform_existed = db.session.query(CryptoPlatform)\
                     .filter(CryptoPlatform.platform_name == platform_name)\
                     .first()
@@ -38,7 +38,6 @@ def sync_coin_list():
         coin_existed = db.session.query(CryptoCurrency)\
                 .filter(CryptoCurrency.gecko_coin_id == coin_id)\
                 .first()
-        print("coin_existed",coin_existed)
         if coin_existed:
             pass
         else:

@@ -1,10 +1,34 @@
 class Config(object):
     DEBUG = True
     STATIC_URL = "static"
-    SQLALCHEMY_DATABASE_URI = 'postgresql://coin_watcher_user:123456@localhost:5432/coin_watcher'
-    AUTH_LOGIN_ENDPOINT = 'login'
-    AUTH_PASSWORD_HASH = 'sha512_crypt'
-    AUTH_PASSWORD_SALT = 'ruewhndjsa17heaw'
-    SECRET_KEY = 'e2q8dhaushdauwd7qye'
-    SESSION_COOKIE_SALT = 'dhuasud819wubadhysagd'
-    API_COIN = 'https://api.coingecko.com/api/v3'
+    SQLALCHEMY_DATABASE_URI = (
+        "postgresql://coin_watcher_user:123456@localhost:5432/coin_watcher"
+    )
+    AUTH_LOGIN_ENDPOINT = "login"
+    AUTH_PASSWORD_HASH = "sha512_crypt"
+    AUTH_PASSWORD_SALT = "ruewhndjsa17heaw"
+    SECRET_KEY = "e2q8dhaushdauwd7qye"
+    SESSION_COOKIE_SALT = "dhuasud819wubadhysagd"
+    API_COIN = "https://api.coingecko.com/api/v3"
+    REDIS_HOST = "127.0.0.1"
+    REDIS_PORT = "6379"
+    REDIS_DB = 0
+
+    BAD_REQUEST_ERR = {"error": "Request Body không hợp lệ"}
+    METHOD_NOT_ALLOW_ERR = {"error": "Request Method không hợp lệ"}
+    DUPLICATE_EMAIL_ERR = {"error": "Email này đã tồn tại với tài khoản khác"}
+    SERVER_ERROR = {"error": "Có lỗi xảy ra, vui lòng thử lại sau"}
+    SEND_EMAIL_ERR = {"error": "Gửi email thất bại"}
+    LOGIN_ERR = {
+        "error": "LOGIN_FAILED",
+        "error_message": "user does not exist or incorrect password",
+    }
+    AUTH_ERR = {"error": "Access Token không hợp lệ"}
+
+    SENDER_ACCOUNT = ""
+    SENDER_ACCOUNT_PASSWORD = ""
+
+    WELCOME_MAIL_TEMPLATE = "email_templates/welcome.txt"
+    WELCOME_MAIL_HEADER = "Welcome To Coinwatcher!"
+    VALIDATE_MAIL_TEMPLATE = "email_templates/send_validate_code.txt"
+    VALIDATE_MAIL_HEADER = "This is your validecode on Coinwatcher"

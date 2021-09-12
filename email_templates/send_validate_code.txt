@@ -1,0 +1,8 @@
+Xin chào ${PERSON_NAME}, 
+
+Cảm ơn bạn đã đăng ký tài khoản tại Coin Watcher.  
+Đây là mã xác minh tài khoản của bạn:
+
+${VALIDATE_CODE}
+  
+Yours Truly

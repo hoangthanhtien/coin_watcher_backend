@@ -1,0 +1,6 @@
+Xin chào ${PERSON_NAME}, 
+
+Cảm ơn bạn đã đăng ký tài khoản tại Coin Watcher.  
+Have a nice day! 
+
+Yours Truly
