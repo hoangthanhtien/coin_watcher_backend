@@ -10,6 +10,7 @@ from application.controllers.helpers import (
 )
 import requests
 import time
+from sqlalchemy import and_
 
 
 def get_dates_between(start_date, end_date):
@@ -38,6 +39,23 @@ def get_coin_price(coin_id: str, date: str):
     return response.json()
 
 
+def check_unique_currency_constrain(date: str, coin_id: int, currency_id: int):
+    """Kiểm tra xem record có thỏa mãn ràng buộc unique của CryptoPrice"""
+    record = (
+        db.session.query(CryptoPrice)
+        .filter(
+            and_(
+                CryptoPrice.coin_id == coin_id,
+                CryptoPrice.currency_id == currency_id,
+                CryptoPrice.date == date,
+            )
+        )
+        .first()
+    )
+
+    return True if not record else False
+
+
 def sync_cryptos_price_history(
     coins_list=None, start_date=None, end_date=None, currency="usd"
 ):
@@ -64,12 +82,20 @@ def sync_cryptos_price_history(
     if isinstance(coins_list, str):
         coins_list = coins_list.split(",")
     for coin_id in coins_list:
-        coin_info = to_dict(
+        coin_record = (
             db.session.query(CryptoCurrency)
             .filter(CryptoCurrency.gecko_coin_id == coin_id)
             .first()
         )
+        if not coin_record:
+            raise Exception(f"Crypto với id {coin_id} chưa được hỗ trợ")
+        coin_info = to_dict(coin_record)
         for date in dates:
+            is_valid_price = check_unique_currency_constrain(
+                date=date, coin_id=coin_info.get("id"), currency_id=currency_id
+            )
+            if not is_valid_price:
+                continue
             coin_price_info = get_coin_price(coin_id=coin_id, date=date)
             price = coin_price_info["market_data"]["current_price"].get(currency)
             if not price:

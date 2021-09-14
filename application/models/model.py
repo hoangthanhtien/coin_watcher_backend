@@ -9,7 +9,7 @@ from sqlalchemy import (
     BigInteger,
     DECIMAL,
     SmallInteger,
-    FLOAT,
+    UniqueConstraint,
 )
 
 from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
@@ -71,6 +71,7 @@ class CryptoCurrency(CommonModel):
     :atr str symbol: viết tắt của coin
     :atr str coin_name: Tên của coin
     :atr str platform_id: Mã id của platform của coin , khóa ngoại tới bảng crypto_platform
+    :atr bool is_follow: Coin có đang được theo dõi để đồng bộ giá hay không
     """
 
     __tablename__ = "crypto_currency"
@@ -80,6 +81,7 @@ class CryptoCurrency(CommonModel):
     coin_name = db.Column(String(100), nullable=False)
     platform_id = db.Column(Integer, ForeignKey("crypto_platform.id"))
     platform = db.relationship("CryptoPlatform")
+    is_follow = db.Column(Boolean, default=False)
 
 
 class CryptoPrice(CommonModel):
@@ -100,6 +102,10 @@ class CryptoPrice(CommonModel):
     currency_id = db.Column(Integer, ForeignKey("currency.id"))
     currency = db.relationship("Currency")
     price = db.Column(DECIMAL(), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("coin_id", "currency_id", "date", name="unique_coin_currency"),
+    )
 
 
 class Currency(CommonModel):

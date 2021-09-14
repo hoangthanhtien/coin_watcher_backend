@@ -11,6 +11,8 @@ import string
 import sqlalchemy
 import json
 from application.workers.sycn_coin_list import sync_coin_list
+from application.workers.sync_recent_price import sync_recent_price
+from application.workers.show_curr_price_chart import show_curr_price_chart
 
 from manager import Manager
 
@@ -34,6 +36,18 @@ def run():
 def sync_list_coin():
     """Đồng bộ danh sách coin"""
     sync_coin_list()
+
+
+@manager.command
+def show_curr_chart(coin_list):
+    """Hiển thị biểu đồ giá hiện tại"""
+    show_curr_price_chart(coin_list)
+
+
+@manager.command
+def sync_recent_coin_prices():
+    """Đồng bộ giá hiện tại của coin, cache trên redis"""
+    sync_recent_price()
 
 
 @manager.command

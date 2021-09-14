@@ -23,6 +23,11 @@ import time
 COLUMN_BLACKLIST = ("_sa_polymorphic_on",)
 
 
+def timestamp_to_datetime(timestamp):
+    timestamp = datetime.datetime.fromtimestamp(timestamp)
+    return str(timestamp.strftime("%d-%m-%Y %H:%M:%S"))
+
+
 def timestamp_to_date(timestamp):
     dt_obj = datetime.datetime.fromtimestamp(timestamp).strftime("%d-%m-%Y")
     return str(dt_obj)
