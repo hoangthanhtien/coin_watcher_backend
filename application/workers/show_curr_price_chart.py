@@ -26,11 +26,11 @@ def write_price_data_to_file(file_name="csv_for_charts/current_prices.dat", data
 
 
 def get_chart_colors(length=1):
-    valid_colors = ["blue", "green", "magenta", "yellow", "black", "cyan"]
+    valid_colors = ["blue", "yellow", "cyan", "green", "black", "magenta"]
     result = ""
     if length > len(valid_colors):
         raise Exception("Biểu đồ hỗ trợ tối da 6 coin")
-    for i in range(1, length + 1):
+    for i in range(0, length):
         result += valid_colors[i] + " "
     return result
 

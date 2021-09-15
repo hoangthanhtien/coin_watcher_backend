@@ -1,10 +1,24 @@
 from application import app
 from application.database import db, redis_db
-from application.models.model import CryptoCurrency
+from application.models.model import CryptoCurrency, Notification
 from application.controllers.helpers import get_current_timestamp, timestamp_to_datetime
 from application.config import Config
+from sqlalchemy import and_
 import requests
 import ujson
+
+
+def check_notification(coin_id, coin_curren_price):
+    """Kiểm tra xem có user nào đặt thông báo tại mức giá này hay không
+    :param str coin_id: Mã gecko_coin_id
+    :param float coin_curren_price: Giá coin hiện tại
+    """
+    notification_records = db.session.query(Notification).filter(
+        and_(Notification.coin_id == coin_id, Notification.is_notify == False).all()
+    )
+
+    for noti in notification_records:
+        pass
 
 
 def get_current_coin_price(coin_id, currency="usd"):
@@ -51,6 +65,7 @@ def sync_recent_price():
 
     for coin in followed_coins:
         coin_id = coin.gecko_coin_id
+        coin_primary_key = coin.id
         coin_curren_price = get_current_coin_price(coin_id=coin_id)
         coin_recent_prices = redis_db.get(coin_id)
         cache_coin_prices(

@@ -49,6 +49,7 @@ def init_views(app):
     import application.controllers.user
     import application.controllers.crypto_currency
     import application.controllers.prices
+    import application.controllers.notification
 
     @app.route("/")
     def index(request):
