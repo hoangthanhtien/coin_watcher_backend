@@ -1,5 +1,16 @@
 ### Ứng dụng tracking giá crypto:
+
+- Hiển thị biểu đồ chênh lệch giá gần nhất ngay trên terminal
+
+```bash
+python manage.py show_curr_chart <chuỗi mã crypto, viết liền, ngăn cách bởi dấu phẩy>
+#python manage.py show_curr_chart binancecoin,ethereum 
+```
+
+<img src="/static/images/show_curr_chart.png"></img>
+<img src="/static/images/show_curr_chart_2.png"></img>
 - Tự động gửi email cảnh báo khi giá tụt xuống một mức nhất định
+
 
 **Đăng ký user** : Khi gửi thông báo sẽ gửi qua email đã đăng ký 
 ```curl
@@ -40,15 +51,6 @@ curl --location --request POST 'http://0.0.0.0:8090/api/v1/notification' \
 }'
 ```
 
-- Hiển thị biểu đồ chênh lệch giá gần nhất ngay trên terminal
-
-```bash
-python manage.py show_curr_chart <chuỗi mã crypto, viết liền, ngăn cách bởi dấu phẩy>
-#python manage.py show_curr_chart binancecoin,ethereum 
-```
-
-<img src="/static/images/show_curr_chart.png"></img>
-<img src="/static/images/show_curr_chart_2.png"></img>
 ### Hướng dẫn cài đặt
 - Yêu cầu có python >= 3.7
 - Cài đặt database Postgresql [tại đây](https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart)
