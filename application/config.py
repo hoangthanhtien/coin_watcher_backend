@@ -32,3 +32,5 @@ class Config(object):
     WELCOME_MAIL_HEADER = "Welcome To Coinwatcher!"
     VALIDATE_MAIL_TEMPLATE = "email_templates/send_validate_code.txt"
     VALIDATE_MAIL_HEADER = "This is your validecode on Coinwatcher"
+    NOTIFY_PRICE_MAIL_HEADER = "COIN WATCHER!!!!!!!"
+    NOTIFY_PRICE_MAIL_TEMPLATE = "email_templates/notify_price.txt"

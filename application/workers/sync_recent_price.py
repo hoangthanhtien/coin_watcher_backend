@@ -1,11 +1,18 @@
 from application import app
 from application.database import db, redis_db
 from application.models.model import CryptoCurrency, Notification
-from application.controllers.helpers import get_current_timestamp, timestamp_to_datetime
+from application.controllers.helpers import (
+    get_current_timestamp,
+    timestamp_to_datetime,
+    send_email,
+    to_dict,
+)
 from application.config import Config
 from sqlalchemy import and_
 import requests
 import ujson
+import asyncio
+import traceback
 
 
 def check_notification(coin_id, coin_curren_price):
@@ -13,12 +20,79 @@ def check_notification(coin_id, coin_curren_price):
     :param str coin_id: Mã gecko_coin_id
     :param float coin_curren_price: Giá coin hiện tại
     """
-    notification_records = db.session.query(Notification).filter(
-        and_(Notification.coin_id == coin_id, Notification.is_notify == False).all()
+    notification_records = (
+        db.session.query(Notification)
+        .filter(and_(Notification.coin_id == coin_id, Notification.is_notify == False))
+        .all()
     )
 
     for noti in notification_records:
-        pass
+        noti_types = str(noti.notify_type).split(",")
+        price_status = noti.price_status
+        notify_price = float(noti.notify_price_at)
+        user_info = to_dict(noti.user)
+        # print(noti_types, price_status, notify_price, user_info, coin_curren_price)
+
+        if "0" in noti_types:
+            # Noti nếu giá hiện hành nhỏ hơn hoặc bằng giá cài đặt để thông báo
+            if price_status == 0:
+                print(noti_types)
+                print(to_dict(noti))
+                if coin_curren_price.get("price") <= notify_price:
+                    data = {
+                        "price": coin_curren_price.get("price"),
+                        "coin_id": to_dict(noti.coin).get("gecko_coin_id"),
+                    }
+                    loop = asyncio.get_event_loop()
+                    try:
+                        loop.run_until_complete(
+                            asyncio.gather(
+                                send_email(
+                                    to_email_addresses=[user_info.get("email")],
+                                    mail_content_type="notify_price",
+                                    additional_data=data,
+                                ),
+                            )
+                        )
+                    except Exception:
+                        exept_txt = traceback.format_exc()
+                        print("exept_txt", exept_txt)
+                    finally:
+                        noti.is_notify = True
+                        db.session.commit()
+                        loop.close()
+
+            # Noti nếu giá hiện hành lớn hơn hoặc bằng giá cài đặt để thông báo
+            if price_status == 1:
+                print(price_status)
+                print(to_dict(noti))
+                if coin_curren_price.get("price") >= notify_price:
+                    data = {
+                        "price": coin_curren_price.get("price"),
+                        "coin_id": to_dict(noti.coin).get("gecko_coin_id"),
+                    }
+                    loop = asyncio.get_event_loop()
+                    try:
+                        loop.run_until_complete(
+                            asyncio.gather(
+                                send_email(
+                                    to_email_addresses=[user_info.get("email")],
+                                    mail_content_type="notify_price",
+                                    additional_data=data,
+                                ),
+                            )
+                        )
+                    except Exception:
+                        exept_txt = traceback.format_exc()
+                        print("exept_txt", exept_txt)
+                    finally:
+                        noti.is_notify = True
+                        db.session.commit()
+                        loop.close()
+                    data = {
+                        "price": notify_price,
+                        "coin_id": to_dict(noti.coin).get("gecko_coin_id"),
+                    }
 
 
 def get_current_coin_price(coin_id, currency="usd"):
@@ -72,4 +146,7 @@ def sync_recent_price():
             coin_id=coin_id,
             recent_prices=coin_recent_prices,
             current_price=coin_curren_price,
+        )
+        check_notification(
+            coin_id=coin_primary_key, coin_curren_price=coin_curren_price
         )

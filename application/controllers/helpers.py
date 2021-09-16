@@ -211,16 +211,20 @@ async def create_validate_string(email):
     return validate_string
 
 
-async def send_email(to_email_addresses: list, mail_content_type: str):
+async def send_email(
+    to_email_addresses: list, mail_content_type: str, additional_data: None
+):
     """Gửi email
     :param list to_email_addresses: Mảng địa chỉ người nhận mail
-    :param str mail_content_type: Loại nội dung gửi đi, bao gồm
-        - welcome : Mail chào mừng
+    :param str mail_content_type: Loại nội dung gửi đi, bao gồm - welcome : Mail chào mừng
         - send_validate_code : Mail gửi mã code bí mật dùng để reset mật khẩu hoặc kích hoạt account
         - validate_success : Thông báo validate thành công
+        - notify_price : Thông báo giá của crypto currency
+    :param any additional_data: Thông tin đính kèm
     """
     # try:
     # set up the SMTP server
+    print("Đang gửi email")
     s = smtplib.SMTP(host="smtp.gmail.com", port=587)
     s.starttls()
     s.login(Config.SENDER_ACCOUNT, Config.SENDER_ACCOUNT_PASSWORD)
@@ -232,12 +236,24 @@ async def send_email(to_email_addresses: list, mail_content_type: str):
     if mail_content_type == "send_validate_code":
         message_template = await read_template(filename=Config.VALIDATE_MAIL_TEMPLATE)
         email_header = Config.VALIDATE_MAIL_HEADER
+    if mail_content_type == "notify_price":
+        message_template = await read_template(
+            filename=Config.NOTIFY_PRICE_MAIL_TEMPLATE
+        )
+        email_header = Config.NOTIFY_PRICE_MAIL_HEADER
 
     for email_address in to_email_addresses:
         msg = MIMEMultipart()
         user_full_name = await get_user_fullname(email=email_address)
         # user_full_name = "Hoàng Thành Tiến"
-        message = message_template.substitute(PERSON_NAME=user_full_name)
+        if mail_content_type == "welcome":
+            message = message_template.substitute(PERSON_NAME=user_full_name)
+        if mail_content_type == "notify_price":
+            message = message_template.substitute(
+                PERSON_NAME=user_full_name,
+                COIN_ID=additional_data.get("coin_id"),
+                PRICE=additional_data.get("price"),
+            )
         if mail_content_type == "send_validate_code":
             pass
 
@@ -247,6 +263,7 @@ async def send_email(to_email_addresses: list, mail_content_type: str):
         msg.attach(MIMEText(message, "plain"))
 
         s.send_message(msg)
+        print("Da gui email")
         del msg
     # except Exception:
     #     return json(Config.SEND_EMAIL_ERR,500)
