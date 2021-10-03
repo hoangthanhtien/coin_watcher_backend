@@ -30,7 +30,8 @@ import time
 
 # toDisplay = "0343"  # numbers and digits to display
 
-delay = 0.005  # delay between digits refresh
+# delay = 0.005  # delay between digits refresh
+delay = 2
 
 # --------------------------------------------------------------------
 # PINS MAPPING AND SETUP
