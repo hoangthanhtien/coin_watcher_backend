@@ -127,7 +127,7 @@ def splitToDisplay(toDisplay):  # splits string to digits to display
 
 try:
     while True:
-        toDisplay = str(redis_db.get("xrp_now"))
+        toDisplay = (redis_db.get("xrp_now")).decode("utf-8")
         if isinstance(toDisplay, int):
             toDisplay = str(toDisplay)
         print("toDisplay", toDisplay)
