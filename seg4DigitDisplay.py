@@ -128,6 +128,8 @@ def splitToDisplay(toDisplay):  # splits string to digits to display
 try:
     while True:
         toDisplay = redis_db.get("xrp_now")
+        if isinstance(toDisplay, int):
+            toDisplay = str(toDisplay)
         showDisplay(splitToDisplay(toDisplay))
 except KeyboardInterrupt:
     print("interrupted!")
