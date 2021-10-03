@@ -112,5 +112,5 @@ def sync_cryptos_price_history(
             db.session.add(price_record)
             print(date, coin_id, price)
             # Delay 1s do giới hạn free api coin gecko
-            time.sleep(1)
+            # time.sleep(1)
     db.session.commit()
