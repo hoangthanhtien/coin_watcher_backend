@@ -30,8 +30,7 @@ import time
 
 # toDisplay = "0343"  # numbers and digits to display
 
-# delay = 0.005  # delay between digits refresh
-delay = 2
+delay = 0.005  # delay between digits refresh
 
 # --------------------------------------------------------------------
 # PINS MAPPING AND SETUP
@@ -132,7 +131,6 @@ try:
             toDisplay = datafile.readline()
             print("toDisplay", toDisplay)
         showDisplay(splitToDisplay(toDisplay))
-        time.sleep(2)
 except KeyboardInterrupt:
     print("interrupted!")
     GPIO.cleanup()
