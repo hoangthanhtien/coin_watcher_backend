@@ -130,6 +130,7 @@ try:
         toDisplay = redis_db.get("xrp_now")
         if isinstance(toDisplay, int):
             toDisplay = str(toDisplay)
+            print("toDisplay")
         showDisplay(splitToDisplay(toDisplay))
 except KeyboardInterrupt:
     print("interrupted!")
