@@ -23,7 +23,6 @@
 # Version: 1.0
 
 # Import required libraries
-from asyncio.tasks import sleep
 import sys
 import RPi.GPIO as GPIO
 import time
@@ -132,7 +131,7 @@ try:
             toDisplay = datafile.readline()
             print("toDisplay", toDisplay)
         showDisplay(splitToDisplay(toDisplay))
-        sleep(2)
+        time.sleep(2)
 except KeyboardInterrupt:
     print("interrupted!")
     GPIO.cleanup()
