@@ -15,6 +15,11 @@ import asyncio
 import traceback
 
 
+def cache_current_price(coin_id, price):
+    price_string = price.get("price")
+    redis_db.set(coin_id, price_string)
+
+
 def check_notification(coin_id, coin_curren_price):
     """Kiểm tra xem có user nào đặt thông báo tại mức giá này hay không
     :param str coin_id: Mã gecko_coin_id
@@ -114,6 +119,7 @@ def get_current_coin_price(coin_id, currency="usd"):
 
 def cache_coin_prices(coin_id=None, recent_prices=None, current_price=None):
     """Lưu giá vào redis"""
+    cache_current_price(coin_id, current_price.get("price"))
     if not recent_prices:
         new_prices = []
         new_prices.append(current_price)
