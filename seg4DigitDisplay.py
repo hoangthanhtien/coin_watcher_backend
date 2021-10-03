@@ -23,13 +23,11 @@
 # Version: 1.0
 
 # Import required libraries
+from asyncio.tasks import sleep
 import sys
 import RPi.GPIO as GPIO
 import time
 
-with open("./application/variables/const.txt", "r") as datafile:
-    toDisplay = datafile.readline()
-    print("toDisplay", toDisplay)
 
 # toDisplay = "0343"  # numbers and digits to display
 
@@ -130,7 +128,11 @@ def splitToDisplay(toDisplay):  # splits string to digits to display
 
 try:
     while True:
+        with open("./application/variables/const.txt", "r") as datafile:
+            toDisplay = datafile.readline()
+            print("toDisplay", toDisplay)
         showDisplay(splitToDisplay(toDisplay))
+        sleep(2)
 except KeyboardInterrupt:
     print("interrupted!")
     GPIO.cleanup()
