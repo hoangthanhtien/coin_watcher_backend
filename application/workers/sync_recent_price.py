@@ -35,7 +35,7 @@ def convert_number_to_4_digits(num):
 
 
 def cache_current_price(coin_id, price):
-    redis_db.set(coin_id, convert_number_to_4_digits(num=price))
+    redis_db.set(coin_id + "_now", convert_number_to_4_digits(num=price))
 
 
 def check_notification(coin_id, coin_curren_price):
