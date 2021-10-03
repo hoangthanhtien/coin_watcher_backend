@@ -26,7 +26,7 @@
 import sys
 import RPi.GPIO as GPIO
 import time
-
+from application.database import redis_db
 
 # toDisplay = "0343"  # numbers and digits to display
 
@@ -127,9 +127,7 @@ def splitToDisplay(toDisplay):  # splits string to digits to display
 
 try:
     while True:
-        with open("./application/variables/const.txt", "r") as datafile:
-            toDisplay = datafile.readline()
-            print("toDisplay", toDisplay)
+        toDisplay = redis_db.get("xrp_now")
         showDisplay(splitToDisplay(toDisplay))
 except KeyboardInterrupt:
     print("interrupted!")
