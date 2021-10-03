@@ -212,7 +212,7 @@ async def create_validate_string(email):
 
 
 async def send_email(
-    to_email_addresses: list, mail_content_type: str, additional_data: None
+    to_email_addresses: list, mail_content_type: str, additional_data=None
 ):
     """Gửi email
     :param list to_email_addresses: Mảng địa chỉ người nhận mail

@@ -9,7 +9,9 @@ import ujson
 
 def auth_func(request=None, **kw):
     access_token = request.headers.get("access_token")
+    print("access_token", access_token)
     if not access_token:
+        print("if not access_token:")
         return json(Config.AUTH_ERR, 401)
     user_info = redis_db.get(access_token)
     if user_info:

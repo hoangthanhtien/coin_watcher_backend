@@ -28,3 +28,5 @@ requests
 redis
 ujson
 pandas
+sanic-cors
+RPi.GPIO

@@ -1,0 +1,5 @@
+Xin chào ${PERSON_NAME}, 
+
+Giá của ${COIN_ID} đang tại mức ${PRICE}
+  
+Yours Truly
