@@ -54,7 +54,9 @@ def sync_recent_coin_prices():
 def sync_coin_price():
     """Đồng bộ danh sách coin"""
     sync_cryptos_price_history(
-        coins_list="bitcoin,ethereum", start_date="10-08-2021", end_date="10-09-2021"
+        coins_list="bitcoin,ethereum,ripple,binancecoin",
+        start_date="01-01-2017",
+        end_date="02-10-2021",
     )
 
 
