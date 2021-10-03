@@ -15,9 +15,28 @@ import asyncio
 import traceback
 
 
+def convert_number_to_4_digits(num):
+    if num <= 9999.9999 and num >= 1000:
+        string = "{:04d}".format(int(num))
+        return string
+    if num <= 999.9999 and num >= 100:
+        string = "{0:.1f}".format(num)
+        return string
+    if num <= 99.9999 and num >= 10:
+        string = "{0:.2f}".format(num)
+        return string
+    if num <= 9.9999 and num >= 1:
+        string = "{0:.3f}".format(num)
+        return string
+    if num < 0.9999 and num > 0:
+        string = "{0:.3f}".format(num)
+        return string
+    return 9999
+
+
 def cache_current_price(coin_id, price):
-    price_string = price.get("price")
-    redis_db.set(coin_id, price_string)
+    price_value = price.get("price")
+    redis_db.set(coin_id, convert_number_to_4_digits(num=price_value))
 
 
 def check_notification(coin_id, coin_curren_price):
