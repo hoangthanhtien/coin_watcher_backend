@@ -5,8 +5,6 @@ from application.database import redis_db, db
 import string
 import random
 import ujson
-from application.models.model import User
-from application.controllers.helpers import to_dict
 
 
 def auth_func(request=None, **kw):
@@ -19,6 +17,9 @@ def auth_func(request=None, **kw):
     if user_info:
         return ujson.loads(user_info)
     else:
+        from application.models.model import User
+        from application.controllers.helpers import to_dict
+
         user_record = db.session.query(User).first()
         return to_dict(user_record)
 
