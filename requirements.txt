@@ -28,5 +28,5 @@ requests
 redis
 ujson
 pandas
-sanic-cors
+sanic-cors==0.9.8
 RPi.GPIO

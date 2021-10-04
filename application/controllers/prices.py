@@ -8,6 +8,16 @@ from application.config import Config
 import ujson
 
 
+@app.route("/current_price", methods=["GET"])
+async def get_current_price(request):
+    coin_id = request.args.get("coin_id")
+    if not coin_id:
+        return json({}, 400)
+    key = coin_id + "_now"
+    price = (redis_db.get(key)).decode("utf-8")
+    return json({"price": price})
+
+
 @app.route("/recent_prices", methods=["GET"])
 async def get_recent_prices(request):
     if request.method == "GET":
