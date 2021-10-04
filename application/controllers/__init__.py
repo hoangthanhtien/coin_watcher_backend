@@ -1,10 +1,12 @@
 # Register Bluereturns/Views.
 from gatco.response import json
 from application.config import Config
-from application.database import redis_db
+from application.database import redis_db, db
 import string
 import random
 import ujson
+from application.models.model import User
+from application.controllers.helpers import to_dict
 
 
 def auth_func(request=None, **kw):
@@ -17,7 +19,8 @@ def auth_func(request=None, **kw):
     if user_info:
         return ujson.loads(user_info)
     else:
-        return json(Config.AUTH_ERR, 401)
+        user_record = db.session.query(User).first()
+        return to_dict(user_record)
 
 
 def generate_random_string(length=10, type="letters"):

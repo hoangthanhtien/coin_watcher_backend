@@ -14,6 +14,7 @@ async def get_current_price(request):
     if not coin_id:
         return json({}, 400)
     key = coin_id + "_now"
+    print(key)
     price = (redis_db.get(key)).decode("utf-8")
     return json({"price": price})
 
