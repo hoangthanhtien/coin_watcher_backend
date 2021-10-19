@@ -25,8 +25,8 @@ class Config(object):
     }
     AUTH_ERR = {"error": "Access Token không hợp lệ"}
 
-    SENDER_ACCOUNT = "tiendangcap123@gmail.com"
-    SENDER_ACCOUNT_PASSWORD = "ng@ho@ng219"
+    SENDER_ACCOUNT = ""
+    SENDER_ACCOUNT_PASSWORD = ""
 
     WELCOME_MAIL_TEMPLATE = "email_templates/welcome.txt"
     WELCOME_MAIL_HEADER = "Welcome To Coinwatcher!"
@@ -36,4 +36,4 @@ class Config(object):
     NOTIFY_PRICE_MAIL_TEMPLATE = "email_templates/notify_price.txt"
 
     CHAT_BOT_WEBHOOKS = "https://stupidchatbot.herokuapp.com/send_noti"
-    CHAT_BOT_VERIFY_TOKEN = "XAUfkAP1aaqUVeFPNvi0"
+    CHAT_BOT_VERIFY_TOKEN = ""
