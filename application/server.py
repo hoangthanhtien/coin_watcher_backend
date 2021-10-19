@@ -8,7 +8,7 @@ from sanic_cors import CORS
 app = Gatco(name=__name__)
 app.session_interface = CookieSessionInterface()  # type: ignore
 app.config.from_object(Config)
-CORS(app)
+CORS(app, automatic_options=True)
 
 from application.database import init_database
 from application.extensions import init_extensions

@@ -91,6 +91,18 @@ def sync_cryptos_price_history(
             raise Exception(f"Crypto với id {coin_id} chưa được hỗ trợ")
         coin_info = to_dict(coin_record)
         for date in dates:
+            coin_price_existed = (
+                db.session.query(CryptoPrice)
+                .filter(
+                    and_(
+                        CryptoPrice.date == date,
+                        CryptoPrice.coin_id == coin_info.get("id"),
+                    )
+                )
+                .first()
+            )
+            if coin_price_existed:
+                continue
             is_valid_price = check_unique_currency_constrain(
                 date=date, coin_id=coin_info.get("id"), currency_id=currency_id
             )

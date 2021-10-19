@@ -52,5 +52,5 @@ def show_curr_price_chart(coin_ids=None):
     write_price_data_to_file(data=prices_info)
     chart_colors = get_chart_colors(length=valid_coin_id_num)
     os.system(
-        f'termgraph ~/sourceCode/python/coin_watcher/repo/csv_for_charts/current_prices.dat --color {chart_colors} --title "Biểu đồ giá crypto hiện tại"'
+        f'termgraph ~/sourceCode/python/coin_watcher/csv_for_charts/current_prices.dat --color {chart_colors} --title "Biểu đồ giá crypto hiện tại"'
     )

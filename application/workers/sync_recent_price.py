@@ -6,6 +6,7 @@ from application.controllers.helpers import (
     timestamp_to_datetime,
     send_email,
     to_dict,
+    send_chatbot_noti,
 )
 from application.config import Config
 from sqlalchemy import and_
@@ -77,6 +78,8 @@ def check_notification(coin_id, coin_curren_price):
                                 ),
                             )
                         )
+                        message = f"Ôi bạn ơi!!! {data['coin_id']} vừa xuống mức {data['price']} kìa, mau mau xúc thôi!"
+                        send_chatbot_noti(message=message)
                     except Exception:
                         exept_txt = traceback.format_exc()
                         print("exept_txt", exept_txt)
@@ -105,6 +108,9 @@ def check_notification(coin_id, coin_curren_price):
                                 ),
                             )
                         )
+
+                        message = f"Ôi bạn ơi!!! {data['coin_id']} vừa tăng lên mức {data['price']} kìa, mau mau bán thôi!"
+                        send_chatbot_noti(message=message)
                     except Exception:
                         exept_txt = traceback.format_exc()
                         print("exept_txt", exept_txt)

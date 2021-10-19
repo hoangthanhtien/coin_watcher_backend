@@ -21,6 +21,7 @@ from application.database import db
 
 from application.extensions import auth
 from application.models.model import User
+from datetime import datetime
 
 # Constants.
 manager = Manager()
@@ -53,10 +54,12 @@ def sync_recent_coin_prices():
 @manager.command
 def sync_coin_price():
     """Đồng bộ danh sách coin"""
+    today = str(datetime.today().strftime('%d-%m-%Y'))
+    print("today",today)
     sync_cryptos_price_history(
         coins_list="bitcoin,ethereum,ripple,binancecoin",
         start_date="01-9-2021",
-        end_date="02-10-2021",
+        end_date=today,
     )
 
 

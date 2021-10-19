@@ -14,6 +14,7 @@ from email.mime.text import MIMEText
 from application.config import Config
 from application.models.model import User
 from application.database import db, redis_db
+import requests
 
 # from sanic.response import json
 import json
@@ -209,6 +210,15 @@ async def create_validate_string(email):
         key_existed = redis_db.get(validate_string)
     redis_db.set(validate_string)
     return validate_string
+
+
+def send_chatbot_noti(message: str = None):
+    params = {
+        "verify_token": Config.CHAT_BOT_VERIFY_TOKEN,
+        "message": message,
+    }
+    requests.post(Config.CHAT_BOT_WEBHOOKS, params=params)
+    return True
 
 
 async def send_email(

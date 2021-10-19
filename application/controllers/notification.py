@@ -10,7 +10,7 @@ apimanager.create_api(
     preprocess=dict(
         GET_SINGLE=[auth_func],
         GET_MANY=[auth_func],
-        POST=[auth_func],
+        POST=[],
         PUT_SINGLE=[auth_func],
     ),
 )
