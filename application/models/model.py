@@ -83,6 +83,18 @@ class CryptoCurrency(CommonModel):
     platform = db.relationship("CryptoPlatform")
     is_follow = db.Column(Boolean, default=False)
 
+    def to_dict(self):
+        result = {
+            "id": self.id,
+            "gecko_coin_id": self.gecko_coin_id,
+            "symbol": self.symbol,
+            "coin_name": self.coin_name,
+            "platform_id": self.platform_id,
+            "is_follow": self.is_follow,
+        }
+
+        return result
+
 
 class CryptoPrice(CommonModel):
     """Lịch sử giá của crypto

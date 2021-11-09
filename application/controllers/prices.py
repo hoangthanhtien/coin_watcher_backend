@@ -45,6 +45,21 @@ async def get_recent_prices(request):
         return json(result, 200)
 
 
+@app.websocket("/realtime_price")
+async def handle_realtime_price(request, ws):
+    while True:
+        data = await ws.recv()
+        coin_ids = ujson.loads(data).get("coin_id")
+        coin_ids = coin_ids.split(",")
+        result = []
+        for coin_id in coin_ids:
+            key = coin_id + "_now"
+            price = (redis_db.get(key)).decode("utf-8")
+            sub_result = {"coin_id": coin_id, "price": float(price)}
+            result.append(sub_result)
+        await ws.send(ujson.dumps(result))
+
+
 apimanager.create_api(
     collection_name="crypto_price",
     model=CryptoPrice,

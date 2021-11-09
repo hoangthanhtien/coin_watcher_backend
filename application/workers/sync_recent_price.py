@@ -36,7 +36,8 @@ def convert_number_to_4_digits(num):
 
 
 def cache_current_price(coin_id, price):
-    redis_db.set(coin_id + "_now", convert_number_to_4_digits(num=price))
+    # redis_db.set(coin_id + "_now", convert_number_to_4_digits(num=price))
+    redis_db.set(coin_id + "_now", price)
 
 
 def check_notification(coin_id, coin_curren_price):
@@ -126,6 +127,7 @@ def check_notification(coin_id, coin_curren_price):
 
 def get_current_coin_price(coin_id, currency="usd"):
     url = Config.API_COIN + f"/simple/price?ids={coin_id}&vs_currencies={currency}"
+    print("url", url)
     response = requests.get(url)
     if response.status_code == 200:
         resp_dict = response.json()

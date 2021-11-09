@@ -37,3 +37,7 @@ class Config(object):
 
     CHAT_BOT_WEBHOOKS = "https://stupidchatbot.herokuapp.com/send_noti"
     CHAT_BOT_VERIFY_TOKEN = ""
+    WEBSOCKET_MAX_SIZE = 2 ** 20
+    WEBSOCKET_MAX_QUEUE = 32
+    WEBSOCKET_READ_LIMIT = 2 ** 16
+    WEBSOCKET_WRITE_LIMIT = 2 ** 16
