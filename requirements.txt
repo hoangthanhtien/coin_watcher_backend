@@ -29,4 +29,3 @@ redis
 ujson
 pandas
 sanic-cors==0.9.8
-RPi.GPIO

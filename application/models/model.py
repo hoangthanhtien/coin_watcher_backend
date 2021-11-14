@@ -82,6 +82,7 @@ class CryptoCurrency(CommonModel):
     platform_id = db.Column(Integer, ForeignKey("crypto_platform.id"))
     platform = db.relationship("CryptoPlatform")
     is_follow = db.Column(Boolean, default=False)
+    dashboard_slot = db.Column(Integer)
 
     def to_dict(self):
         result = {

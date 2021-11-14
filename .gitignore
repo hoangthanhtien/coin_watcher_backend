@@ -10,3 +10,5 @@ application/**/__pycache__
 .settings
 dump.rdb
 /**/*.DS_Store
+__pycache__
+./sync_coin_price.sh
