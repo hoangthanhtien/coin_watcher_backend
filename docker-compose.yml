@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres 
+    restart: unless-stopped 
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    ports:
+      - $POSTGRES_LOCAL_PORT:$POSTGRES_DOCKER_PORT
+    volumes:
+      - db:/data/db
+  cache:
+    image: redis
+    env_file: ./.env
+    ports:
+      - $REDIS_LOCAL_PORT:$REDIS_DOCKER_PORT
+  app:
+    depends_on:
+      - database 
+      - cache 
+    build: .
+    restart: unless-stopped
+    env_file: ./.env
+    volumes:
+      - ./:/app
+    ports:
+      - $PORT:$PORT
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
