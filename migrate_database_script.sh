@@ -1,4 +1,5 @@
 #!/bin/bash
+source .env
 if [[ -z "${POSTGRES_LOCAL_PORT}" ||  -z "${POSTGRES_USER}" ||  -z "${POSTGRES_PASSWORD}"|| -z "${POSTGRES_DB}" ]]; then
   echo "Missing environment variables, please set the env in .env file"
   exit 1
