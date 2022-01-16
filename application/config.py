@@ -1,8 +1,9 @@
+import os
 class Config(object):
     DEBUG = True
     STATIC_URL = "static"
     SQLALCHEMY_DATABASE_URI = (
-        "postgresql://coin_watcher_user:123456@localhost:5432/coin_watcher"
+        f"postgresql://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@database:{os.environ['POSTGRES_DOCKER_PORT']}/{os.environ['POSTGRES_DB']}"
     )
     AUTH_LOGIN_ENDPOINT = "login"
     AUTH_PASSWORD_HASH = "sha512_crypt"
@@ -10,7 +11,7 @@ class Config(object):
     SECRET_KEY = "e2q8dhaushdauwd7qye"
     SESSION_COOKIE_SALT = "dhuasud819wubadhysagd"
     API_COIN = "https://api.coingecko.com/api/v3"
-    REDIS_HOST = "127.0.0.1"
+    REDIS_HOST = "cache"
     REDIS_PORT = "6379"
     REDIS_DB = 0
 

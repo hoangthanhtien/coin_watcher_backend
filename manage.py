@@ -1,7 +1,6 @@
 """ Module for managing tasks through a simple cli interface. """
 # Libraries
 
-from websockets import protocol
 from application.workers.sync_cryptos_price_history import sync_cryptos_price_history
 import sys
 from os.path import abspath, dirname
